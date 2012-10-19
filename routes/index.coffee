@@ -19,20 +19,26 @@ module.exports = (app, db) ->
         run: () -> 
           url = @options.url
           @getHtml url, (err, $)  =>
-            if err? then @exit err else 
+            if err? 
+             console.log(err)
+             # @exit err 
+             @emit null
+            else 
+              console.log($)
+              if $? and $('body', this, true).innerHTML? then body = $('body').innerHTML 
+              if $? and $('body', this, true).innerHTML? then head = $('head').innerHTML 
               @emit 
-                body : $('body').innerHTML 
-                head : $('head').innerHTML       
+                body : body 
+                head : head
+
     @class = SavePage
     Scrape = new SavePage()
 
     nodeio.start(Scrape,{redirects:100, url:siteUrl},(err, output) ->
       if err? then console.log(err)
       else
-        # output = String(output).replace(/document.write\((.*?)\)/g,"jQuery(\"#masthead\").append( $1 );  ")
-        
-        #console.log(output[0].body)
-        # output = String(output).replace(/document.write\((.*?)\)/g," jQuery('body').append(''); console.log(navigator.userAgent)") #.replace(/\<noscript\>/g,"").replace(/\<\/noscript\>/g,"")
+        if output[0].head? then head = output[0].head
+        if output[0].body? then head = output[0].body
 
         # res.contentType 'json'
         # res.send output
