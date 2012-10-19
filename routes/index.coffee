@@ -24,9 +24,9 @@ module.exports = (app, db) ->
              # @exit err 
              @emit null
             else 
-              console.log($)
-              if $? and $('body', this, true).innerHTML? then body = $('body').innerHTML 
-              if $? and $('body', this, true).innerHTML? then head = $('head').innerHTML 
+              body = $('body', $('*').context, true).innerHTML 
+              head = $('head', $('*').context, true).innerHTML 
+              # console.log($('body', $('*').context) ) 
               @emit 
                 body : body 
                 head : head
