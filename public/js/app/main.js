@@ -6,7 +6,7 @@
     baseUrl: "js/lib/",
     paths: {
       app: "../app",
-      _jquery: "require-jquery",
+      jquery: "require-jquery",
       backbone: "backbone-min",
       underscore: "underscore-min",
       jqueryui: "jquery-ui-1.8.19.custom.min",
@@ -41,9 +41,7 @@
     Aloha = window.Aloha = {};
   }
 
-  define("core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], function($) {
-    return $;
-  });
+  define("core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], function($) {});
 
   Aloha.settings = {
     locale: "en",
@@ -58,12 +56,21 @@
     }
   };
 
-  requirejs(["core", "ich", "app/views/mainView"], function($, ich, mainView) {
-    var mainPage, myRoutes, router;
-    mainPage = new mainView();
+  requirejs(["core", "ich", "app/views/mainView", "app/views/editView"], function($, ich, mainView, editView) {
+    var myRoutes, router;
     myRoutes = Backbone.Router.extend({
       routes: {
+        "": "main",
+        grabsite: "grabsite",
         login: "login"
+      },
+      grabsite: function() {
+        var editPage;
+        return editPage = new editView();
+      },
+      main: function() {
+        var mainPage;
+        return mainPage = new mainView();
       },
       login: function() {
         $("#login").modal("show");
@@ -73,10 +80,9 @@
       }
     });
     router = new myRoutes();
-    Backbone.history.start({
+    return Backbone.history.start({
       pushState: true
     });
-    return $(".ui, .ui-icon, .ui-resizable-handle").hide();
   });
 
 }).call(this);

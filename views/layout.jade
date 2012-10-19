@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 html
-	head
-		title= title
-		link(rel='stylesheet', href='/stylesheets/style.css')
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
 
-		//- link(rel='stylesheet', href='/stylesheets/jquery-ui-1.8.21.custom.css')
-		//- link(rel='stylesheet', href='/js/lib/bootstrap/css/bootstrap.css')
+    //- link(rel='stylesheet', href='/stylesheets/jquery-ui-1.8.21.custom.css')
+    //- link(rel='stylesheet', href='/js/lib/bootstrap/css/bootstrap.css')
 
-		link(rel='stylesheet', href="/js/lib/aloha/css/aloha.css")
-		link(rel='stylesheet', href="/js/lib/file_uploader/fileuploader.css")
-		link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href="/js/lib/aloha/css/aloha.css")
+    link(rel='stylesheet', href="/js/lib/file_uploader/fileuploader.css")
+    link(rel='stylesheet', href='/stylesheets/style.css')
 
-		script(data-main="/js/app/main", src="/js/lib/require-jquery.js")
+    if(typeof head !== "undefined")
+      != head
 
-	body
-		block content
+
+    script(data-main="/js/app/main", src="/js/lib/require-jquery.js")
+
+  body
+    block content

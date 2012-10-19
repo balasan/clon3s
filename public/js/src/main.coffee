@@ -3,7 +3,7 @@ requirejs.config
   baseUrl: "js/lib/"
   paths:
     app: "../app"
-    _jquery: "require-jquery"
+    jquery: "require-jquery"
     backbone: "backbone-min"
     underscore: "underscore-min"
     jqueryui: "jquery-ui-1.8.19.custom.min"
@@ -36,7 +36,6 @@ requirejs.config
 Aloha = window.Aloha = {}  if window.Aloha is `undefined` or window.Aloha is null
 
 define "core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], ($) ->
-  $
 
 Aloha.settings =
   locale: "en"
@@ -52,18 +51,22 @@ Aloha.settings =
 #this is for the media upload library - tbd
 # requirejs ["core", "app/views/mediaView"], ($, MediaView) ->
 
-requirejs ["core", "ich", "app/views/mainView"], ($, ich, mainView) ->
-
+requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], ($, ich, mainView, editView) ->
+  
   #ToDo: in case we need global backbone events
   #vent = _.extend({}, Backbone.Events)
 
   #Todo: need this?
-  mainPage = new mainView()
-
   myRoutes = Backbone.Router.extend(
     routes:
+      "" : "main"
+      grabsite : "grabsite"
       login: "login"
 
+    grabsite: ->
+      editPage = new editView()
+    main: ->
+      mainPage = new mainView()
     login: ->
       $("#login").modal "show"
       $("#login").on "hide", ->
@@ -74,5 +77,4 @@ requirejs ["core", "ich", "app/views/mainView"], ($, ich, mainView) ->
   router = new myRoutes()
 
   Backbone.history.start pushState: true
-  $(".ui, .ui-icon, .ui-resizable-handle").hide()
 

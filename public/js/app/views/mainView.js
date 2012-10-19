@@ -9,76 +9,48 @@
         var url,
           _this = this;
         url = $('#urlInput').val();
-        return $(document).load("/grabsite", {
-          url: url
-        }).done(function(data) {
-          var $data, $html, $scripts, html, nonscripts, scripts;
-          $data = $(data[0]);
-          $html = $data;
-          nonscripts = $html.filter(function() {
-            return !$(this).is("script");
-          });
-          scripts = $html.filter(function() {
-            return $(this).is("script");
-          });
-          $data.each(function() {
-            return $('body').append(this);
-          });
-          $html = $(data);
-          html = data;
-          $data = String(html).replace(/<\!DOCTYPE[^>]*>/i, "").replace(/<(script)([\s\>])/g, "<div class=\"document-$1\"$2").replace(/<\/(script)\>/g, "</div>");
-          $data = $($data);
-          $scripts = $data.find('.document-script');
-          $scripts.each(function() {
-            var $script;
-            $script = $(this);
-            if ($script.parent() !== $('head')) {
-              return $script.detach();
-            }
-          });
-          if ($scripts.length) {
-            $scripts.detach();
+        return $.ajax({
+          url: "/grabsite",
+          type: 'POST',
+          data: {
+            url: url
           }
-          $scripts.each(function() {
-            var $script, contentNode, scriptNode, scriptText;
-            $script = $(this);
-            if ($script.parent() === $('head')) {
-              scriptText = $script.html();
-              scriptNode = document.createElement("script");
-              contentNode = $($script.data('parent'));
-              try {
-                scriptNode.appendChild(document.createTextNode(scriptText));
-                $('head').append(scriptNode);
-              } catch (e) {
-                scriptNode.text = scriptText;
-                $('head').append(scriptNode);
-              }
-              if ($(this).attr("src") != null) {
-                return scriptNode.setAttribute("src", $(this).attr("src"));
-              }
+        }).done(function(data) {
+          var $data, bodyScirpts, headScripts;
+          $data = String(data).replace(/<\!DOCTYPE[^>]*>/i, "").replace(/<(html|head|body)([\s\>])/g, "<div class=\"document-$1\"$2").replace(/<\/(html|head|body)\>/g, "</div>");
+          headScripts = $($data).find('.document-head').find('.document-script');
+          bodyScirpts = $($data).find('.document-body').find('.document-script');
+          $('head').append($($data).find('.document-head').html());
+          $('head').remove('.document-script');
+          $('body').append($($data).find('.document-body').html());
+          $('.document-script').remove();
+          $('body').find("*").each(function() {
+            if (($(this).text() != null) && $(this).text() !== "") {
+              return $(this).addClass('editableClone');
             }
           });
-          $("body").html($data);
-          $scripts.each(function() {
+          requirejs(["aloha"], function() {
+            return Aloha.ready(function() {
+              return Aloha.jQuery('.editableClone').aloha();
+            });
+          });
+          return headScripts.each(function() {
             var $script, contentNode, scriptNode, scriptText;
             $script = $(this);
-            if ($script.parent() === $('head')) {
-              scriptText = $script.html();
-              scriptNode = document.createElement("script");
-              contentNode = $($script.data('parent'));
-              try {
-                scriptNode.appendChild(document.createTextNode(scriptText));
-                $('head').append(scriptNode);
-              } catch (e) {
-                scriptNode.text = scriptText;
-                $('head').append(scriptNode);
-              }
-              if ($(this).attr("src") != null) {
-                return scriptNode.setAttribute("src", $(this).attr("src"));
-              }
+            scriptText = $script.html();
+            scriptNode = document.createElement("script");
+            contentNode = $($script.data('parent'));
+            try {
+              scriptNode.appendChild(document.createTextNode(scriptText));
+              $('head').append(scriptNode);
+            } catch (e) {
+              scriptNode.text = scriptText;
+              $('head').append(scriptNode);
+            }
+            if ($(this).attr("src") != null) {
+              return scriptNode.setAttribute("src", $(this).attr("src"));
             }
           });
-          return $("body").append(nonscripts).append(scripts);
         });
       },
       render: function() {
