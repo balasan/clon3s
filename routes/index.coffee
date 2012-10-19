@@ -19,7 +19,7 @@ module.exports = (app, db) ->
         run: () -> 
           url = @options.url
           @getHtml url, (err, $)  =>
-            if err? then @exit console.log(err) err else 
+            if err? then @exit err else 
               @emit 
                 body : $('body').innerHTML 
                 head : $('head').innerHTML       
