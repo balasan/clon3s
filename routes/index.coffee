@@ -28,19 +28,19 @@ module.exports = (app, db) ->
 
     nodeio.start(Scrape,{redirects:100, url:siteUrl},(err, output) ->
       if err? then console.log(err)
+      else
+        # output = String(output).replace(/document.write\((.*?)\)/g,"jQuery(\"#masthead\").append( $1 );  ")
+        
+        #console.log(output[0].body)
+        # output = String(output).replace(/document.write\((.*?)\)/g," jQuery('body').append(''); console.log(navigator.userAgent)") #.replace(/\<noscript\>/g,"").replace(/\<\/noscript\>/g,"")
 
-      # output = String(output).replace(/document.write\((.*?)\)/g,"jQuery(\"#masthead\").append( $1 );  ")
-      
-      console.log(output[0].body)
-      # output = String(output).replace(/document.write\((.*?)\)/g," jQuery('body').append(''); console.log(navigator.userAgent)") #.replace(/\<noscript\>/g,"").replace(/\<\/noscript\>/g,"")
-
-      # res.contentType 'json'
-      # res.send output
-      # console.log output
-      res.render "index",
-        head: output[0].head
-        body: output[0].body
-        ,title: "cone this plz"
+        # res.contentType 'json'
+        # res.send output
+        # console.log output
+        res.render "index",
+          head: output[0].head
+          body: output[0].body
+          ,title: "cone this plz"
     
     ,true)
 
