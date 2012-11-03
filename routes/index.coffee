@@ -24,7 +24,6 @@ module.exports = (app, db) ->
              # @exit err 
              @emit null
             else 
-              ads = {}
               body = $('body', $('*').context, true).innerHTML 
               head = $('head', $('*').context, true).innerHTML 
               # this would be much easier, but does not work... why?
@@ -33,20 +32,17 @@ module.exports = (app, db) ->
                 if el.raw.match('google_ad_client')
                   newAd = el.raw.replace(/google_ad_client = [^/]+/i, "google_ad_client = 'OURSTUFF'"); 
                   newAd = newAd.replace(/google_ad_slot = [^/]+/i, "google_ad_slot = 'OURSTUFF'"); 
-                  ads[el.raw] = newAd
+                  body = body.replace(el.raw, newAd)
                 if el.children
                   for child in el.children
                     if child.raw.match('google_ad_client')
                       newAd = child.raw.replace(/google_ad_client = [^/]+/i, "google_ad_client = 'OURSTUFF'");
                       newAd = newAd.replace(/google_ad_slot = [^/]+/i, "google_ad_slot = 'OURSTUFF'");  
-                      ads[child.raw] = newAd
-              for raw, newAd of ads
-                body = body.replace(raw, newAd)
+                      body = body.replace(child.raw, newAd)
               # console.log($('body', $('*').context) ) 
               @emit 
                 body : body 
                 head : head
-                ads  : ads
 
     @class = SavePage
     Scrape = new SavePage()
