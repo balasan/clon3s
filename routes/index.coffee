@@ -24,18 +24,24 @@ module.exports = (app, db) ->
              # @exit err 
              @emit null
             else 
-              ads = []
+              ads = {}
               body = $('body', $('*').context, true).innerHTML 
-              head = $('head', $('*').context, true).innerHTML               
-              # this would be much easier.. 
+              head = $('head', $('*').context, true).innerHTML 
+              # this would be much easier, but does not work... why?
               # adSence = $("script:contains(google_ad_client)")
               $('script').each (el) ->
                 if el.raw.match('google_ad_client')
-                  ads.push(el)
+                  newAd = el.raw.replace(/google_ad_client = [^/]+/i, "google_ad_client = 'OURSTUFF'"); 
+                  newAd = newAd.replace(/google_ad_slot = [^/]+/i, "google_ad_slot = 'OURSTUFF'"); 
+                  ads[el.raw] = newAd
                 if el.children
                   for child in el.children
                     if child.raw.match('google_ad_client')
-                      ads.push(el)
+                      newAd = child.raw.replace(/google_ad_client = [^/]+/i, "google_ad_client = 'OURSTUFF'");
+                      newAd = newAd.replace(/google_ad_slot = [^/]+/i, "google_ad_slot = 'OURSTUFF'");  
+                      ads[child.raw] = newAd
+              for raw, newAd of ads
+                body = body.replace(raw, newAd)
               # console.log($('body', $('*').context) ) 
               @emit 
                 body : body 
