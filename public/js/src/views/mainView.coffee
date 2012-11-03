@@ -32,6 +32,8 @@ define ["backbone", "ich"], (Backbone, ich) ->
           # $($data).find('.document-head').remove('.document-script') 
 
           # bodyScirpts.detach()
+          # ADSENSE:
+          #adSence = $("script:contains('google_ad_client')")
 
           $('head').append($($data).find('.document-head').html())
           $('head').remove('.document-script')

@@ -13,7 +13,7 @@ module.exports = (app, db) ->
 
   grabsite : (req, res) ->
     siteUrl = req.body.url
-    console.log(siteUrl)
+    console.log(siteUrl, 'url')
     class SavePage extends nodeio.JobClass
         input: false 
         run: () -> 
@@ -24,12 +24,23 @@ module.exports = (app, db) ->
              # @exit err 
              @emit null
             else 
+              ads = []
               body = $('body', $('*').context, true).innerHTML 
-              head = $('head', $('*').context, true).innerHTML 
+              head = $('head', $('*').context, true).innerHTML               
+              # this would be much easier.. 
+              # adSence = $("script:contains(google_ad_client)")
+              $('script').each (el) ->
+                if el.raw.match('google_ad_client')
+                  ads.push(el)
+                if el.children
+                  for child in el.children
+                    if child.raw.match('google_ad_client')
+                      ads.push(el)
               # console.log($('body', $('*').context) ) 
               @emit 
                 body : body 
                 head : head
+                ads  : ads
 
     @class = SavePage
     Scrape = new SavePage()
