@@ -13,13 +13,9 @@ module.exports = (app, db) ->
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     region: amazon.US_EAST_1
   )
-  
-  # var knox = require('knox')
-  # var client = knox.createClient({
-  #     key: process.env.AWS_ACCESS_KEY_ID
-  #   , secret: process.env.AWS_SECRET_ACCESS_KEY
-  #   , bucket: process.env.S3_BUCKET_NAME
-  # });
+
+
+
   uploadFile = (req, targetdir, callback) ->
     moveToDestination = (sourcefile, targetfile, filesize, filetype) ->
       processFile sourcefile, targetfile, filesize, filetype, (err, data) ->
@@ -42,6 +38,7 @@ module.exports = (app, db) ->
     #     else
     #         callback({success: false, error: err});
     # });
+
     if req.xhr
       fname = req.header("x-file-name")
       size = req.header("x-file-size")
@@ -218,6 +215,25 @@ module.exports = (app, db) ->
           fs.unlinkSync source
 
         callback()
+
+  saveSite: (req, res) ->
+    console.log('saving')
+    filename = req.body.name + ".html"
+    html = req.body.content
+    path = "/tmp/"+filename
+    fs.writeFile "/tmp/"+filename, html, (err) ->
+      if err
+        console.log err
+        res.send JSON.stringify(err),
+          "Content-Type": "text/plain"
+        , 404
+      else
+        console.log "The file was saved!"
+        uploadToAmazon filename, path, "text/html", (data) ->
+          console.log(data)
+          res.send JSON.stringify(data),
+            "Content-Type": "text/plain"
+          , 200
 
 
 

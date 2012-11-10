@@ -3,8 +3,7 @@
 module.exports = function(){
 
 	var mongoose = require('mongoose');
-	//mongoose.connect('mongodb://'+ process.env.MONGODB_USERNAME + ':'+ process.env.MONGODB_PASSWORD + '@ds035137.mongolab.com:35137/cms')
-	mongoose.connect('mongodb://'+ process.env.MONGODB_USERNAME + ':'+ process.env.MONGODB_PASSWORD + '@ds033047.mongolab.com:33047/infwin')
+	mongoose.connect('mongodb://'+ process.env.MONGODB_USERNAME + ':'+ process.env.MONGODB_PASSWORD + '@ds041347.mongolab.com:41347/cloner')
 
 
 	var Schema = mongoose.Schema;

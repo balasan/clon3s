@@ -2,10 +2,27 @@ extends layout
 
 block content
 
+
+
   script#inputTemp(type='text/html')
+  
     form.urlContainer.form-inline(action="/grabsite", method="post")
       input.input-xxlarge#urlInput(type="text", name="url", placeholder="Enter the URL of the Website you would like to clone")
       button.btn#cloneSite(type="submit") Clone This!
+
+
+  script#editTemp(type='text/html')
+
+    a.btn#saveTrigger.iu(href='#saveSiteModal', role='button', data-toggle='modal') Save Site
+
+    #saveSiteModal.modal.hide.fade
+      .modal-header
+          button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+        .modal-body
+          input#siteName
+        .modal-footer
+          a.btn.btn-primary#saveSite.ui(href='javascript:void()') Save
+
 
   if(typeof body !== "undefined")
     != body

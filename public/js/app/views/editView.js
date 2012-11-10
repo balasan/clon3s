@@ -7,32 +7,50 @@
     EditView = Backbone.View.extend({
       el: $('body'),
       events: {
+        "click #saveSite": "saveSite",
         "click": "editElement"
+      },
+      saveSite: function() {
+        var _this = this;
+        return $.ajax({
+          url: "/saveSite",
+          type: 'POST',
+          data: {
+            content: "<!DOCTYPE html><html>" + $('html').html() + "</html>",
+            name: $("#siteName").val()
+          }
+        }).done(function(response) {
+          return console.log(response);
+        });
       },
       editElement: function(e) {
         var el,
           _this = this;
         el = e.target;
-        return requirejs(["aloha"], function() {
-          return Aloha.ready(function() {
-            var editable;
-            if ((($(el).text() != null) && $(el).text() !== "") || $(el).is('img')) {
-              if (!$(el).parent().text().match("document.write")) {
-                if ($(el).is('img')) {
-                  editable = $(el).parent().addClass("editableClone");
-                } else if ($(el).is('a')) {
-                  editable = $(el).addClass("editableClone");
-                } else {
-                  editable = $(el).parent().addClass("editableClone");
+        if (!$(el).hasClass('ui')) {
+          return requirejs(["aloha"], function() {
+            return Aloha.ready(function() {
+              var editable;
+              if ((($(el).text() != null) && $(el).text() !== "") || $(el).is('img')) {
+                if (!$(el).parent().text().match("document.write")) {
+                  if ($(el).is('img')) {
+                    editable = $(el).parent().addClass("editableClone");
+                  } else if ($(el).is('a')) {
+                    editable = $(el).addClass("editableClone");
+                  } else {
+                    editable = $(el).parent().addClass("editableClone");
+                  }
+                  e.preventDefault();
+                  return Aloha.jQuery(editable).aloha().focus();
                 }
-                e.preventDefault();
-                return Aloha.jQuery(editable).aloha().focus();
               }
-            }
+            });
           });
-        });
+        }
       },
-      render: function() {},
+      render: function() {
+        return $('body').append(ich.editTemp());
+      },
       initialize: function() {
         _.bindAll(this, "render", "editElement");
         return this.render();

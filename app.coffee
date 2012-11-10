@@ -6,7 +6,7 @@ Module dependencies.
 db = null
 express = require("express")
 routes = require("./routes")(app, db)
-user = require("./routes/user")
+upload = require("./routes/upload")(app, db)
 http = require("http")
 path = require("path")
 app = express()
@@ -27,7 +27,7 @@ app.configure "development", ->
 
 app.get "/", routes.index
 app.post "/grabsite", routes.grabsite
-
+app.post "/saveSite", upload.saveSite
 
 http.createServer(app).listen app.get("port"), ->
   console.log "Express server listening on port " + app.get("port")
