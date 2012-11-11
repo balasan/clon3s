@@ -14,7 +14,10 @@ module.exports = (app, db) ->
 
   grabsite : (req, res) ->
     siteUrl = req.body.url
-    console.log(siteUrl, 'url')
+    # console.log(siteUrl, 'url')
+    unless siteUrl.match("http:")
+      siteUrl = "http://"+siteUrl  
+    siteHost = url.parse(siteUrl).hostname
     class SavePage extends nodeio.JobClass
         input: false 
         run: () -> 
