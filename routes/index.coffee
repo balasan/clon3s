@@ -3,7 +3,6 @@ module.exports = (app, db) ->
 
   url = require 'url'
 
-  console.log(this, "HIGHEST CONTEXT")
 
   nodeio = require "node.io"
 
@@ -15,10 +14,9 @@ module.exports = (app, db) ->
 
   grabsite : (req, res) ->
     siteUrl = req.body.url
-    console.log(req.body, "BODY!")
+    unless siteUrl.match("http:")
+      siteUrl = "http://"+siteUrl  
     siteHost = url.parse(siteUrl).hostname
-    console.log(siteHost, "HOST!")
-    console.log(siteUrl, 'url')
     class SavePage extends nodeio.JobClass
         input: false 
         run: () -> 
