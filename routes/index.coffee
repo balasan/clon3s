@@ -3,6 +3,7 @@ module.exports = (app, db) ->
 
   url = require 'url'
 
+  console.log(this, "HIGHEST CONTEXT")
 
   nodeio = require "node.io"
 
@@ -13,6 +14,9 @@ module.exports = (app, db) ->
 
   grabsite : (req, res) ->
     siteUrl = req.body.url
+    console.log(req.body, "BODY!")
+    siteHost = url.parse(siteUrl).hostname
+    console.log(siteHost, "HOST!")
     console.log(siteUrl, 'url')
     class SavePage extends nodeio.JobClass
         input: false 
@@ -23,7 +27,7 @@ module.exports = (app, db) ->
              console.log(err)
              # @exit err 
              @emit null
-            else 
+            else
               body = $('body', $('*').context, true).innerHTML 
               head = $('head', $('*').context, true).innerHTML 
               # this would be much easier, but does not work... why?
@@ -39,7 +43,9 @@ module.exports = (app, db) ->
                       newAd = child.raw.replace(/google_ad_client = [^/]+/i, "google_ad_client = 'OURSTUFF'");
                       newAd = newAd.replace(/google_ad_slot = [^/]+/i, "google_ad_slot = 'OURSTUFF'");  
                       body = body.replace(child.raw, newAd)
-              # console.log($('body', $('*').context) ) 
+              #bodyChildren = $('body', $('*').context, true).children
+              body = swapLinks(body, siteHost)
+              head = swapLinks(head, siteHost)
               @emit 
                 body : body 
                 head : head
@@ -59,12 +65,25 @@ module.exports = (app, db) ->
         res.render "index",
           head: output[0].head
           body: output[0].body
-          ,title: "cone this plz"
+          ,title: "clone this plz"
     
     ,true)
 
 
-
-
-
-
+    swapLinks =  (bdy, siteHost, src = "src") =>
+      linkType  = src+'="(\w|\W|[^"]*)"'
+      re = new RegExp(linkType,"g");
+      #allSrc  =  bdy.match(/src="\/(\w|\W|[^"]*)"/g)
+      allSrc  =  bdy.match(re)
+      if allSrc
+        cont = {}
+        for mtch in allSrc
+          unless mtch.match(/(facebook\.com|twitter\.com|facebook\.net|www\.|\/{2}|ftp\.)/)
+            cont[mtch] = mtch.replace(src+'="', src+'="http://'+siteHost+"/")
+        for k,v of cont
+          bdy = bdy.replace(k, v)      
+        console.log(cont, "REPLACED LINKS")
+      if src == "src"
+        bdy = swapLinks(bdy, siteHost, "href") 
+      else
+        bdy
