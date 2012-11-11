@@ -4,12 +4,13 @@ block content
 
 
 
+
   script#inputTemp(type='text/html')
   
     form.urlContainer.form-inline(action="/grabsite", method="post")
       input.input-xxlarge#urlInput(type="text", name="url", placeholder="Enter the URL of the Website you would like to clone")
       button.btn#cloneSite(type="submit") Clone This!
-    a(href="/auth/facebook") 
+    a#FacebookBtn(href="/auth/facebook") 
       |fb login 
       img(src="login-with-facebook.png", width="154", height="22")
     a(href="/logout") Log Out

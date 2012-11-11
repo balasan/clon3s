@@ -53,6 +53,7 @@ Aloha.settings =
 
 requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], (_$, ich, mainView, editView) ->
 
+  # TODO move this to a ui view
   $(document).ready ->
     # FB fix
     if window.location.hash and window.location.hash is "#_=_"
@@ -66,6 +67,21 @@ requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], (_$, ich,
         window.location.hash = ""
         document.body.scrollTop = scroll.top
         document.body.scrollLeft = scroll.left
+
+
+    # signinWin = undefined
+    # $("#FacebookBtn").live 'click', () ->
+    #   pos = 
+    #     x : $(window).width()/2 -  300 
+    #     y: $(window).height()/2 - 150
+    #   signinWin = window.open("/auth/facebook", "SignIn", "width=600,height=300,toolbar=0,scrollbars=0,status=0,resizable=0,location=0,menuBar=0,left=" + pos.x + ",top=" + pos.y)
+    #   signinWin.handler = () ->
+    #     console.log('logged in!')
+
+    #   $(signinWin).on 'close', () ->
+    #     console.log('logged in!')
+    #   signinWin.focus()
+    #   false
 
 
   

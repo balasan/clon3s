@@ -49,7 +49,7 @@ app.post "/saveSite", upload.saveSite
 
 
 
-app.get "/auth/facebook", passport.authenticate("facebook", {display:'popup'}), (req, res) ->
+app.get "/auth/facebook", passport.authenticate("facebook"), (req, res) ->
 app.get "/auth/facebook/callback", passport.authenticate("facebook",
   failureRedirect: "/login"
 ), (req, res) ->
