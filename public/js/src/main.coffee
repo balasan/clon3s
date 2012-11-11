@@ -51,10 +51,27 @@ Aloha.settings =
 #this is for the media upload library - tbd
 # requirejs ["core", "app/views/mediaView"], ($, MediaView) ->
 
-requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], ($, ich, mainView, editView) ->
+requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], (_$, ich, mainView, editView) ->
+
+  $(document).ready ->
+    # FB fix
+    if window.location.hash and window.location.hash is "#_=_"
+      if window.history and history.pushState
+        #if (Modernizr.history) {
+        window.history.pushState "", document.title, window.location.pathname
+      else
+        scroll =
+          top: document.body.scrollTop
+          left: document.body.scrollLeft
+        window.location.hash = ""
+        document.body.scrollTop = scroll.top
+        document.body.scrollLeft = scroll.left
+
+
   
   #ToDo: in case we need global backbone events
   #vent = _.extend({}, Backbone.Events)
+
 
   #Todo: need this?
   myRoutes = Backbone.Router.extend(

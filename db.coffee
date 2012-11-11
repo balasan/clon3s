@@ -1,44 +1,11 @@
 module.exports = ->
   mongoose = require("mongoose")
   
-  #mongoose.connect('mongodb://'+ process.env.MONGODB_USERNAME + ':'+ process.env.MONGODB_PASSWORD + '@ds035137.mongolab.com:35137/cms')
-  mongoose.connect "mongodb://" + process.env.MONGODB_USERNAME + ":" + process.env.MONGODB_PASSWORD + "@ds033047.mongolab.com:33047/infwin"
+  mongoose.connect "mongodb://" + process.env.MONGODB_USERNAME + ":" + process.env.MONGODB_PASSWORD + "@ds041347.mongolab.com:41347/cloner"
 
   Schema = mongoose.Schema
 
-  elementSchema = new Schema(
-    url: String
-    name:
-      type: String
-      index: true
-    renditions: Array
-    tags:
-      type: Array
-      index: true
-    source: String
-    size: Number
-    width: Number
-    height: Number
-    order: Number
-    parent: String
-    page: String
-    text: String
-    type: String
-  )
-
-  moduleSchema = new Schema(
-    width: Number
-    height: Number
-    elements: [elementSchema]
-    order: Number
-    space:
-      type: Number
-      default: 0
-    parent: String
-    page: String
-  )
-
-  pageSchema = new Schema(
+  siteSchema = new Schema(
     name:
       type: String
       index:

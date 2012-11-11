@@ -21,7 +21,8 @@
     "imagemagick": "=0.1.1",
     "node-uuid": "latest",
     "awssum" : "latest",
-    "fmt" : "latest"
+    "fmt" : "latest",
+    "connect-mongo": "latest"
   }
     , "devDependencies": {
       "mocha": "latest"

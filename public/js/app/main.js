@@ -56,8 +56,24 @@
     }
   };
 
-  requirejs(["core", "ich", "app/views/mainView", "app/views/editView"], function($, ich, mainView, editView) {
+  requirejs(["core", "ich", "app/views/mainView", "app/views/editView"], function(_$, ich, mainView, editView) {
     var myRoutes, router;
+    $(document).ready(function() {
+      var scroll;
+      if (window.location.hash && window.location.hash === "#_=_") {
+        if (window.history && history.pushState) {
+          return window.history.pushState("", document.title, window.location.pathname);
+        } else {
+          scroll = {
+            top: document.body.scrollTop,
+            left: document.body.scrollLeft
+          };
+          window.location.hash = "";
+          document.body.scrollTop = scroll.top;
+          return document.body.scrollLeft = scroll.left;
+        }
+      }
+    });
     myRoutes = Backbone.Router.extend({
       routes: {
         "": "main",

@@ -1,4 +1,36 @@
-module.exports = (app, db) ->
+module.exports = (app, db, passport) ->
+
+
+  util = require('util')
+  FacebookStrategy = require('passport-facebook').Strategy
+
+
+  passport.serializeUser (user, done) ->
+    done null, user
+
+  passport.deserializeUser (obj, done) ->
+    done null, obj
+
+  passport.use new FacebookStrategy(
+    clientID: process.env.FACEBOOK_APP_ID
+    clientSecret: process.env.FACEBOOK_APP_SECRET
+    redirect_uri: "http://cms.com:5000"
+    callbackURL: "http://cms.com:5000/auth/facebook/callback"
+  , (accessToken, refreshToken, profile, done) ->
+    
+    # asynchronous verification, for effect...
+    process.nextTick ->
+      
+      # To keep the example simple, the user's Facebook profile is returned to
+      # represent the logged-in user.  In a typical application, you would want
+      # to associate the Facebook account with a user record in your database,
+      # and return that user instead.
+      done null, profile
+  )
+
+  ensureAuthenticated = (req, res, next) ->
+    return next()  if req.isAuthenticated()
+    res.redirect "/login"
   
   authenticate = (name, pass, fn) ->
     db.userModel.find {}, (err, result) ->

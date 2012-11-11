@@ -9,6 +9,10 @@ block content
     form.urlContainer.form-inline(action="/grabsite", method="post")
       input.input-xxlarge#urlInput(type="text", name="url", placeholder="Enter the URL of the Website you would like to clone")
       button.btn#cloneSite(type="submit") Clone This!
+    a(href="/auth/facebook") 
+      |fb login 
+      img(src="login-with-facebook.png", width="154", height="22")
+    a(href="/logout") Log Out
 
 
   script#editTemp(type='text/html')
@@ -26,3 +30,7 @@ block content
 
   if(typeof body !== "undefined")
     != body
+
+  if(typeof user !== "undefined")
+    script(type='text/javascript')
+      var user = !{JSON.stringify(user)}
