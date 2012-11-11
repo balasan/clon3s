@@ -25,17 +25,6 @@ module.exports = function(){
 	})
 
 
-	var moduleSchema = new Schema({
-		width:Number
-		,height:Number
-		,elements:[elementSchema]
-		,order:Number
-		,space:{type: Number, default: 0}
-		,parent:String
-		,page:String
-
-	})
-
 	var pageSchema = new Schema({
 		name:{type : String, index: { unique: true }}
 		,modules : [moduleSchema]
@@ -69,8 +58,7 @@ module.exports = function(){
 	})
 
 	return {
-		elementModel : mongoose.model('textModel', elementSchema),
-		moduleModel : mongoose.model('moduleModel', moduleSchema),
+		// elementModel : mongoose.model('textModel', elementSchema),
 		pageModel : mongoose.model('pageModel', pageSchema),
 		userModel : mongoose.model('userModel', userSchema),
 		mediaModel: mongoose.model('mediaModel', mediaSchema),

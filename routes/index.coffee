@@ -9,6 +9,7 @@ module.exports = (app, db) ->
   index : (req, res) ->
     res.render "index",
       title: 'clone this plz'
+      user: req.user
 
 
   grabsite : (req, res) ->

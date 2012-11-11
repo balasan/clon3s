@@ -104,6 +104,21 @@ requirejs([
 	var vent = _.extend({}, Backbone.Events);
   var currentPage = new PageView({vent:vent})
 
+  $(document).ready( ()->
+    //FB fix
+    if window.location.hash and window.location.hash is "#_=_"
+      if window.history and history.pushState
+        #if (Modernizr.history) {
+        window.history.pushState "", document.title, window.location.pathname
+      else
+        scroll =
+          top: document.body.scrollTop
+          left: document.body.scrollLeft
+        window.location.hash = ""
+        document.body.scrollTop = scroll.top
+        document.body.scrollLeft = scroll.left)
+
+
 
  // Backbone.sync = function(method, model, options) {
  //    var type = methodMap[method];
@@ -248,3 +263,4 @@ function freeze_gif(i,div,c) {
 
   }
 }
+
