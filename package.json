@@ -23,7 +23,7 @@
     "awssum" : "latest",
     "fmt" : "latest",
     "connect-mongo": "latest",
-     "phantom": "git://github.com/amir20/phantomjs-node.git#phantom-1.7-fix"
+    "phantom": "git://github.com/amir20/phantomjs-node.git#phantom-1.7-fix"
    
   }
     , "devDependencies": {

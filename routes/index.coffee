@@ -2,7 +2,6 @@
 module.exports = (app, db) ->
 
   url_module = require 'url'
-  fs = require 'fs'
   
   phantom = require 'phantom'
 
