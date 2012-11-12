@@ -8,6 +8,7 @@ module.exports = (app, db) ->
   im = require("imagemagick")
   amazon = awssum.load("amazon/amazon")
   S3 = awssum.load("amazon/s3").S3
+  console.log(process.env)
   s3 = new S3(
     accessKeyId: process.env.AWS_ACCESS_KEY_ID
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
