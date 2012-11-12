@@ -1,10 +1,17 @@
 
 module.exports = (app, db) ->
 
-  url = require 'url'
+  url_module = require 'url'
+  fs = require 'fs'
+  
+  phantom = require 'phantom'
 
 
   nodeio = require "node.io"
+
+# $('body').html2canvas({
+# onrendered: function( canvas ) {
+# img = canvas.toDataURL()}})
 
   index : (req, res) ->
     res.render "index",
@@ -17,7 +24,7 @@ module.exports = (app, db) ->
     # console.log(siteUrl, 'url')
     unless siteUrl.match("http:")
       siteUrl = "http://"+siteUrl  
-    siteHost = url.parse(siteUrl).hostname
+    siteHost = url_module.parse(siteUrl).hostname
     class SavePage extends nodeio.JobClass
         input: false 
         run: () -> 
@@ -28,6 +35,7 @@ module.exports = (app, db) ->
              # @exit err 
              @emit null
             else 
+              allPage = $('html', $('*').context, true).innerHTML 
               body = $('body', $('*').context, true).innerHTML 
               head = $('head', $('*').context, true).innerHTML 
 
@@ -48,6 +56,7 @@ module.exports = (app, db) ->
               body = swapLinks(body, siteHost)
               head = swapLinks(head, siteHost)
               head = swapStyle(head, siteHost, $)
+              grabPage(siteUrl, $)
               @emit 
                 body : body 
                 head : head
@@ -104,4 +113,20 @@ module.exports = (app, db) ->
             bdy = bdy.replace(k, v)      
           console.log(cont, "REPLACED LINKS IN STYLE")
       bdy
+
+
+    grabPage = (siteUrl, $) =>
+      siteU = siteUrl.replace("http://","")
+      phantom.create (ph) =>
+        ph.createPage (page) =>
+          page.set('viewportSize', {width:1024, height: 768})                            
+          page.set('clipRect', {top: 0, left: 0, width: 1024, height: 768 })
+          page.open(siteUrl, (status)->
+            console.log(status)
+            page.render(siteU+".png", ->
+              ph.exit());
+            )
+          
+          
+          
 

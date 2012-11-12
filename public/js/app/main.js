@@ -17,7 +17,8 @@
       fileupload: "file.upload",
       aloha: "aloha/lib/aloha-full",
       fileUploader: "file_uploader/fileuploader",
-      drag: "jquery.drag"
+      drag: "jquery.drag",
+
     },
     shim: {
       ich: {
