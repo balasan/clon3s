@@ -17,7 +17,8 @@
       fileupload: "file.upload",
       aloha: "aloha/lib/aloha",
       fileUploader: "file_uploader/fileuploader",
-      drag: "jquery.drag"
+      drag: "jquery.drag",
+
     },
     map: {
       '*': {
