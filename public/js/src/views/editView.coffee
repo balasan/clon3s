@@ -1,10 +1,9 @@
 
-define ["backbone", "ich"], (Backbone, ich) ->
+define ["backbone", "ich", 'jquery'], (Backbone, ich, $) ->
 
-  $ = jQuery
   EditView = Backbone.View.extend(
 
-    el: $('body'),
+    el: 'body',
 
     events:
       "click #saveSite" : "saveSite"
@@ -47,7 +46,7 @@ define ["backbone", "ich"], (Backbone, ich) ->
 
 
     render: ->
-
+      ich.grabTemplates()
       $('body').append(ich.editTemp())
       # $('body').html($('body').html().replace(/document.write/g, ""))
       # requirejs ["aloha"], =>

@@ -6,7 +6,7 @@
     baseUrl: "js/lib/",
     paths: {
       app: "../app",
-      jquery: "require-jquery",
+      jquery: "jquery-1.7.1.min",
       backbone: "backbone-min",
       underscore: "underscore-min",
       jqueryui: "jquery-ui-1.8.19.custom.min",
@@ -15,9 +15,17 @@
       masonry: "jquery.masonry.min",
       json2: "json2",
       fileupload: "file.upload",
-      aloha: "aloha/lib/aloha-full",
+      aloha: "aloha/lib/aloha",
       fileUploader: "file_uploader/fileuploader",
       drag: "jquery.drag"
+    },
+    map: {
+      '*': {
+        'jquery': 'jquery.nc'
+      },
+      'jquery.nc': {
+        'jquery': 'jquery'
+      }
     },
     shim: {
       ich: {
@@ -30,6 +38,12 @@
       underscore: {
         exports: "_"
       },
+      jqueryui: ['jquery'],
+      masonry: ['jquery'],
+      aloha: {
+        deps: ["jquery"],
+        exprots: "Aloha"
+      },
       backbone: {
         deps: ["underscore", "jquery"],
         exports: "Backbone"
@@ -37,11 +51,13 @@
     }
   });
 
+  define('jquery.nc', ['jquery'], function($) {
+    return $.noConflict();
+  });
+
   if (window.Aloha === undefined || window.Aloha === null) {
     Aloha = window.Aloha = {};
   }
-
-  define("core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], function($) {});
 
   Aloha.settings = {
     locale: "en",
@@ -56,7 +72,7 @@
     }
   };
 
-  requirejs(["core", "ich", "app/views/mainView", "app/views/editView"], function(_$, ich, mainView, editView) {
+  requirejs(["jquery", "ich", "app/views/mainView", "app/views/editView"], function($, ich, mainView, editView) {
     var myRoutes, router;
     $(document).ready(function() {
       var scroll;

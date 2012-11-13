@@ -1,9 +1,10 @@
 
+
 requirejs.config
   baseUrl: "js/lib/"
   paths:
     app: "../app"
-    jquery: "require-jquery"
+    jquery: "jquery-1.7.1.min"
     backbone: "backbone-min"
     underscore: "underscore-min"
     jqueryui: "jquery-ui-1.8.19.custom.min"
@@ -12,9 +13,14 @@ requirejs.config
     masonry: "jquery.masonry.min"
     json2: "json2"
     fileupload: "file.upload"
-    aloha: "aloha/lib/aloha-full"
+    aloha: "aloha/lib/aloha"
     fileUploader: "file_uploader/fileuploader"
     drag: "jquery.drag"
+  map:
+    '*':
+      'jquery': 'jquery.nc'
+    'jquery.nc':
+      'jquery': 'jquery'
 
   shim:
 
@@ -28,14 +34,29 @@ requirejs.config
     underscore:
       exports: "_"
 
+    jqueryui: ['jquery']
+    masonry: ['jquery']
+
+    aloha:
+      deps: ["jquery"]
+      exprots: "Aloha"
+
     backbone:
       deps: ["underscore", "jquery"]
       exports: "Backbone"
+      # init: (_,$)->
+      #   @Backbone.noConflict()
+
+
+
+define 'jquery.nc', ['jquery'], ($) ->
+    $.noConflict()
 
 
 Aloha = window.Aloha = {}  if window.Aloha is `undefined` or window.Aloha is null
 
-define "core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], ($) ->
+# define "core", ["jquery", "drag", "masonry", "jqueryui", "bootstrap"], (_$) ->
+#   _$
 
 Aloha.settings =
   locale: "en"
@@ -48,10 +69,12 @@ Aloha.settings =
     format:
       config: ["b", "i", "p", "h1", "h2", "h3", "pre", "removeFormat"]
 
+
 #this is for the media upload library - tbd
 # requirejs ["core", "app/views/mediaView"], ($, MediaView) ->
 
-requirejs ["core", "ich", "app/views/mainView", "app/views/editView"], (_$, ich, mainView, editView) ->
+
+requirejs ["jquery", "ich", "app/views/mainView", "app/views/editView"], ($, ich, mainView, editView) ->
 
   # TODO move this to a ui view
   $(document).ready ->

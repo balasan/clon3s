@@ -1,5 +1,5 @@
 
-define ["backbone", "ich"], (Backbone, ich) ->
+define ["backbone", "ich", "jquery"], (Backbone, ich, $) ->
 
   MainView = Backbone.View.extend(
 

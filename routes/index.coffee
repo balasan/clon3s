@@ -21,15 +21,18 @@ module.exports = (app, db) ->
     class SavePage extends nodeio.JobClass
         input: false 
         run: () -> 
-          url = @options.url
-          @getHtml url, (err, $)  =>
+          myUrl = @options.url
+          @getHtml myUrl, (err, $)  =>
             if err? 
              console.log(err)
              # @exit err 
              @emit null
             else 
-              body = $('body', $('*').context, true).innerHTML 
-              head = $('head', $('*').context, true).innerHTML 
+              body = $('body', $('*').context, true).innerHTML
+              # get rid of possible rquire
+              # TODO better option?
+              head = $('head', $('*').context, true).innerHTML
+              # .replace('require.js' , '')  
 
               # this would be much easier, but does not work... why?
               # adSence = $("script:contains(google_ad_client)")
