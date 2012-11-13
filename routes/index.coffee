@@ -17,7 +17,6 @@ module.exports = (app, db) ->
       title: 'clone this plz'
       user: req.user
 
-
   grabsite : (req, res) ->
     siteUrl = req.body.url
     # console.log(siteUrl, 'url')
