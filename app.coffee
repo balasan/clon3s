@@ -40,6 +40,11 @@ app.configure ->
   app.use app.router
   app.use express.static(path.join(__dirname, "public"))
 
+
+process.on "uncaughtException", (err) ->
+  console.log "Caught exception: " + err
+
+
 app.configure "development", ->
   app.use express.errorHandler()
 

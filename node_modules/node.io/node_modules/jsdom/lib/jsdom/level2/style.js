@@ -57,9 +57,24 @@ core.CSSStyleDeclaration = cssstyle.CSSStyleDeclaration;
 //   Rect
 //   Counter
 
-// StyleSheetList has the same interface as NodeList, so we'll use the same
-// object.
-core.StyleSheetList = core.NodeList;
+// StyleSheetList -
+// http://www.w3.org/TR/DOM-Level-2-Style/stylesheets.html#StyleSheets-StyleSheetList
+// added a push method to help manage the length
+core.StyleSheetList = function() {
+  this._length = 0;
+};
+core.StyleSheetList.prototype = {
+  item: function (i) {
+    return this[i];
+  },
+  push: function (sheet) {
+    this[this._length] = sheet;
+    this._length++;
+  },
+  get length() {
+    return this._length;
+  }
+};
 
 core.Document.prototype.__defineGetter__('styleSheets', function() {
   if (!this._styleSheets) {
@@ -97,6 +112,7 @@ function evaluateStylesheet(data, sheet, baseUrl) {
   spliceArgs.unshift(0, sheet.cssRules.length);
   Array.prototype.splice.apply(sheet.cssRules, spliceArgs);
   scanForImportRules.call(this, sheet.cssRules, baseUrl);
+  this.ownerDocument.styleSheets.push(sheet);
 }
 /**
  * @this {html.HTMLLinkElement|html.HTMLStyleElement}
@@ -224,7 +240,13 @@ html.HTMLStyleElement._init = function() {
       //console.log('bad type: ' + this.type)
       return;
     }
-    evaluateStylesheet.call(this, this.textContent, this.sheet, this._ownerDocument.URL);
+    var content = '';
+    Array.prototype.forEach.call(this.childNodes, function (child) {
+      if (child.nodeType === child.TEXT_NODE) { // text node
+        content += child.nodeValue;
+      }
+    });
+    evaluateStylesheet.call(this, content, this.sheet, this._ownerDocument.URL);
   });
 };
 html.HTMLStyleElement.prototype.__defineGetter__('sheet', getOrCreateSheet);
