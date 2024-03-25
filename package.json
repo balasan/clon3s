@@ -11,7 +11,7 @@
   },
 
   "dependencies": {
-    "express": "3.0.0rc5",
+    "express": "4.19.2",
     "jade": "*",
     "node.io":"latest",
     "coffee-script" : "1.3.x",
